@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
                          @Override
                          public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
-                             if (response.isSuccessful()){
+                             if (!response.isSuccessful()){
                                  tvResult.setText("Code: " + response.code());
                              }else{
                                  List<Post> posts= response.body();
