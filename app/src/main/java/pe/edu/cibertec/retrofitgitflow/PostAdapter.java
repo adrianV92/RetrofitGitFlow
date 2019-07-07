@@ -14,11 +14,12 @@ import java.util.List;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
     private List<Post> mDataset;
+    private ClickListener clickListener;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
-    public static class PostViewHolder extends RecyclerView.ViewHolder {
+    public class PostViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         // each data item is just a string in this case
         public TextView tvTitle;
         public TextView tvBody;
@@ -26,6 +27,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             super(view);
             this.tvTitle=view.findViewById(R.id.tvTitle);
             this.tvBody=view.findViewById(R.id.tvBody);
+            view.setOnClickListener(this);
+        }
+        @Override
+        public void onClick(View v){
+            clickListener.onItemClick(getAdapterPosition());
         }
     }
 
@@ -60,4 +66,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     public int getItemCount() {
         return mDataset.size();
     }
+
+    public final void setOnItemClickListener(ClickListener clickListener){
+        this.clickListener=clickListener;
+
+    }
+
+    public interface ClickListener {
+        void onItemClick (int position);
+    }
+
 }
