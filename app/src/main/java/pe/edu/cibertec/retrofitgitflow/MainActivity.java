@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import pe.edu.cibertec.retrofitgitflow.TriggerClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -20,8 +22,9 @@ public class MainActivity extends AppCompatActivity {
 
     //private TextView tvResult;
     private RecyclerView rvResult;
-    private RecyclerView.Adapter mAdapter;
+    private PostAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
+    private ArrayList<Post> postList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,8 +33,8 @@ public class MainActivity extends AppCompatActivity {
         rvResult= findViewById(R.id.rvResult);
         layoutManager = new LinearLayoutManager(this);
         rvResult.setLayoutManager(layoutManager);
-
-        mAdapter = new PostAdapter(new ArrayList<Post>());
+        postList = new ArrayList<>();
+        mAdapter = new PostAdapter(postList);
         rvResult.setAdapter(mAdapter);
 
         callService();
@@ -51,17 +54,16 @@ public class MainActivity extends AppCompatActivity {
                              if (!response.isSuccessful()){
                                  //tvResult.setText("Code: " + response.code());
                              }else{
-                                 List<Post> posts= response.body();
+                                 final List<Post> posts= response.body();
                                  mAdapter = new PostAdapter(posts);
+                                 mAdapter.setOnItemClickListener(new PostAdapter.ClickListener() {
+                                     @Override
+                                     public void onItemClick(int position) {
+                                         TriggerClick.selectItem(posts.get(position).getId(), MainActivity.this);
+                                     }
+                                 });
                                  rvResult.setAdapter(mAdapter);
-                                 for (Post post : posts){
-                                     String content="";
-                                     content+= "Id: "+ post.getId()+"\n";
-                                     content+= "userId: "+ post.getUserId()+"\n";
-                                     content+= "Title: "+ post.getTitle()+"\n";
-                                     content+= "Body: "+ post.getText()+"\n";
-                                     //tvResult.append(content);
-                                 }
+
                              }
                          }
 

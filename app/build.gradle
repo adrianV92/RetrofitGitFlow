@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('D:\\Semana3Git\\Keystore\\keystore.jks')
+            storePassword 'password'
+            keyAlias = 'cibertecavr'
+            keyPassword 'password'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "pe.edu.cibertec.retrofitgitflow"
@@ -14,6 +22,20 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+
+    flavorDimensions "default"
+
+    productFlavors {
+        free {
+            applicationId "pe.edu.cibertec.retrofitgitflow.free"
+            versionName "1.0-free"
+        }
+        paid {
+            applicationId "pe.edu.cibertec.retrofitgitflow.paid"
+            versionName "1.0-paid"
         }
     }
 }
